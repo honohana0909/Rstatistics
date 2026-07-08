@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Rでらくらく心理統計　小杉考司</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="chap03_practice_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chap03_practice_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="chap03_practice_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="chap03_practice_files/libs/quarto-html/popper.min.js"></script>
+<script src="chap03_practice_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="chap03_practice_files/libs/quarto-html/anchor.min.js"></script>
+<link href="chap03_practice_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chap03_practice_files/libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="chap03_practice_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="chap03_practice_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="chap03_practice_files/libs/bootstrap/bootstrap-138a6193a3bd40baf1e627da441a4734.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#第0章-rの基礎" id="toc-第0章-rの基礎" class="nav-link active" data-scroll-target="#第0章-rの基礎">第0章　Rの基礎</a>
+  <ul class="collapse">
+  <li><a href="#ソースコード0.1-関数" id="toc-ソースコード0.1-関数" class="nav-link" data-scroll-target="#ソースコード0.1-関数">ソースコード0.1　関数</a></li>
+  <li><a href="#ソースコード0.2-関数のヘルプ" id="toc-ソースコード0.2-関数のヘルプ" class="nav-link" data-scroll-target="#ソースコード0.2-関数のヘルプ">ソースコード0.2　関数のヘルプ</a></li>
+  <li><a href="#ソースコード0.3-大文字と小文字の区別" id="toc-ソースコード0.3-大文字と小文字の区別" class="nav-link" data-scroll-target="#ソースコード0.3-大文字と小文字の区別">ソースコード0.3　大文字と小文字の区別</a></li>
+  <li><a href="#ソースコード0.4-オブジェクトに代入" id="toc-ソースコード0.4-オブジェクトに代入" class="nav-link" data-scroll-target="#ソースコード0.4-オブジェクトに代入">ソースコード0.4　オブジェクトに代入</a></li>
+  <li><a href="#ソースコード0.5-オブジェクトのまま計算" id="toc-ソースコード0.5-オブジェクトのまま計算" class="nav-link" data-scroll-target="#ソースコード0.5-オブジェクトのまま計算">ソースコード0.5 　オブジェクトのまま計算</a></li>
+  <li><a href="#ソースコード0.7-ベクトルの計算" id="toc-ソースコード0.7-ベクトルの計算" class="nav-link" data-scroll-target="#ソースコード0.7-ベクトルの計算">ソースコード0.7　ベクトルの計算</a></li>
+  <li><a href="#ソースコード0.8-リスト" id="toc-ソースコード0.8-リスト" class="nav-link" data-scroll-target="#ソースコード0.8-リスト">ソースコード0.8　リスト</a></li>
+  <li><a href="#ソースコード0.9-データフレーム" id="toc-ソースコード0.9-データフレーム" class="nav-link" data-scroll-target="#ソースコード0.9-データフレーム">ソースコード0.9　データフレーム</a></li>
+  <li><a href="#ソースコード0.10-ファイルの読み込み" id="toc-ソースコード0.10-ファイルの読み込み" class="nav-link" data-scroll-target="#ソースコード0.10-ファイルの読み込み">ソースコード0.10　ファイルの読み込み</a></li>
+  <li><a href="#ソースコード0.11-ファイルの選択" id="toc-ソースコード0.11-ファイルの選択" class="nav-link" data-scroll-target="#ソースコード0.11-ファイルの選択">ソースコード0.11 ファイルの選択</a></li>
+  </ul></li>
+  <li><a href="#第1章-測定と尺度" id="toc-第1章-測定と尺度" class="nav-link" data-scroll-target="#第1章-測定と尺度">第1章　測定と尺度</a></li>
+  <li><a href="#第2章-変数" id="toc-第2章-変数" class="nav-link" data-scroll-target="#第2章-変数">第2章　変数</a>
+  <ul class="collapse">
+  <li><a href="#中心化傾向の指標" id="toc-中心化傾向の指標" class="nav-link" data-scroll-target="#中心化傾向の指標">中心化傾向の指標</a></li>
+  <li><a href="#データの相対的位置" id="toc-データの相対的位置" class="nav-link" data-scroll-target="#データの相対的位置">データの相対的位置</a></li>
+  </ul></li>
+  <li><a href="#第3章-複数の変数" id="toc-第3章-複数の変数" class="nav-link" data-scroll-target="#第3章-複数の変数">第3章　複数の変数</a>
+  <ul class="collapse">
+  <li><a href="#ソースコード3.1-クロス集計表" id="toc-ソースコード3.1-クロス集計表" class="nav-link" data-scroll-target="#ソースコード3.1-クロス集計表">ソースコード3.1　クロス集計表</a></li>
+  </ul></li>
+  <li><a href="#第4章-母集団と標本" id="toc-第4章-母集団と標本" class="nav-link" data-scroll-target="#第4章-母集団と標本">第4章　母集団と標本</a></li>
+  <li><a href="#第5章-統計的仮設検定の考え方" id="toc-第5章-統計的仮設検定の考え方" class="nav-link" data-scroll-target="#第5章-統計的仮設検定の考え方">第5章 統計的仮設検定の考え方</a>
+  <ul class="collapse">
+  <li><a href="#ソースコード5.1-無相関データ" id="toc-ソースコード5.1-無相関データ" class="nav-link" data-scroll-target="#ソースコード5.1-無相関データ">ソースコード5.1　無相関データ</a></li>
+  <li><a href="#step1仮説を考える" id="toc-step1仮説を考える" class="nav-link" data-scroll-target="#step1仮説を考える">Step1：仮説を考える</a></li>
+  <li><a href="#step2有意水準棄却域を決める" id="toc-step2有意水準棄却域を決める" class="nav-link" data-scroll-target="#step2有意水準棄却域を決める">Step2：有意水準・棄却域を決める</a></li>
+  <li><a href="#step3統計的仮説検定量を考える" id="toc-step3統計的仮説検定量を考える" class="nav-link" data-scroll-target="#step3統計的仮説検定量を考える">Step3：統計的仮説検定量を考える</a></li>
+  </ul></li>
+  <li><a href="#第6章-度数分布の考え方" id="toc-第6章-度数分布の考え方" class="nav-link" data-scroll-target="#第6章-度数分布の考え方">第6章 度数分布の考え方</a>
+  <ul class="collapse">
+  <li><a href="#ソースコード6.1" id="toc-ソースコード6.1" class="nav-link" data-scroll-target="#ソースコード6.1">ソースコード6.1</a></li>
+  </ul></li>
+  <li><a href="#第7章-平均値の差の検定基本原理" id="toc-第7章-平均値の差の検定基本原理" class="nav-link" data-scroll-target="#第7章-平均値の差の検定基本原理">第7章 平均値の差の検定、基本原理</a>
+  <ul class="collapse">
+  <li><a href="#用語の整理" id="toc-用語の整理" class="nav-link" data-scroll-target="#用語の整理">用語の整理</a></li>
+  <li><a href="#ソースコード7.1-対応のないt検定" id="toc-ソースコード7.1-対応のないt検定" class="nav-link" data-scroll-target="#ソースコード7.1-対応のないt検定">ソースコード7.1　対応のないt検定</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Rでらくらく心理統計　小杉考司</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="第0章-rの基礎" class="level2">
+<h2 class="anchored" data-anchor-id="第0章-rの基礎">第0章　Rの基礎</h2>
+<p>Rの基礎</p>
+<section id="ソースコード0.1-関数" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード0.1-関数">ソースコード0.1　関数</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">16</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+</section>
+<section id="ソースコード0.2-関数のヘルプ" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード0.2-関数のヘルプ">ソースコード0.2　関数のヘルプ</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">help</span>(sqrt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="ソースコード0.3-大文字と小文字の区別" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード0.3-大文字と小文字の区別">ソースコード0.3　大文字と小文字の区別</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">help</span>(Sqrt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>No documentation for 'Sqrt' in specified packages and libraries:
+you could try '??Sqrt'</code></pre>
+</div>
+</div>
+<p>↑エラーが返ってくる.</p>
+</section>
+<section id="ソースコード0.4-オブジェクトに代入" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード0.4-オブジェクトに代入">ソースコード0.4　オブジェクトに代入</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>obj<span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>obj</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+</section>
+<section id="ソースコード0.5-オブジェクトのまま計算" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード0.5-オブジェクトのまま計算">ソースコード0.5 　オブジェクトのまま計算</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>obj2<span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>obj3<span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>obj2 <span class="sc">+</span> obj3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+</div>
+<section id="ソースコード0.6-連続した数字" class="level4">
+<h4 class="anchored" data-anchor-id="ソースコード0.6-連続した数字">ソースコード0.6 連続した数字</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>obj</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="ソースコード0.7-ベクトルの計算" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード0.7-ベクトルの計算">ソースコード0.7　ベクトルの計算</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> obj <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>obj</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  2  4  6  8 10 12 14 16 18 20</code></pre>
+</div>
+</div>
+<p>データセットをmatrix型に変換することもできる.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>),<span class="at">nrow=</span><span class="dv">5</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>obj</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2]
+[1,]    1    6
+[2,]    2    7
+[3,]    3    8
+[4,]    4    9
+[5,]    5   10</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>obj <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2]
+[1,]    2   12
+[2,]    4   14
+[3,]    6   16
+[4,]    8   18
+[5,]   10   20</code></pre>
+</div>
+</div>
+<p>列や行のみの表示</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>obj[<span class="dv">1</span>,]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 6</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>obj[,<span class="dv">2</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  6  7  8  9 10</code></pre>
+</div>
+</div>
+</section>
+<section id="ソースコード0.8-リスト" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード0.8-リスト">ソースコード0.8　リスト</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="at">name=</span><span class="fu">c</span>(<span class="st">"kosugi"</span>,<span class="st">"tanaka"</span>,<span class="st">"suzuki"</span>),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="at">gender=</span><span class="fu">c</span>(<span class="st">"male"</span>,<span class="st">"female"</span>,<span class="st">"male"</span>),<span class="at">height=</span><span class="fu">c</span>(<span class="dv">170</span>,<span class="dv">160</span>),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="at">weight=</span><span class="fu">c</span>(<span class="fl">70.6</span>,<span class="fl">80.9</span>,<span class="fl">90.6</span>,<span class="fl">40.3</span>))</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>obj</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$name
+[1] "kosugi" "tanaka" "suzuki"
+
+$gender
+[1] "male"   "female" "male"  
+
+$height
+[1] 170 160
+
+$weight
+[1] 70.6 80.9 90.6 40.3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#＄に変数名を指定することで、リストの中の変数を取り出すことができる.</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>obj<span class="sc">$</span>name</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "kosugi" "tanaka" "suzuki"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#str関数を使うと、オブジェクトの構造を確認することができる.</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(obj)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 4
+ $ name  : chr [1:3] "kosugi" "tanaka" "suzuki"
+ $ gender: chr [1:3] "male" "female" "male"
+ $ height: num [1:2] 170 160
+ $ weight: num [1:4] 70.6 80.9 90.6 40.3</code></pre>
+</div>
+</div>
+</section>
+<section id="ソースコード0.9-データフレーム" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード0.9-データフレーム">ソースコード0.9　データフレーム</h3>
+<p>統計解析においては、データフレームを使うことが多い.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">name=</span><span class="fu">c</span>(<span class="st">"kosugi"</span>,<span class="st">"tanaka"</span>,<span class="st">"suzuki"</span>),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">gender=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">height=</span><span class="fu">c</span>(<span class="dv">170</span>,<span class="dv">160</span>,<span class="dv">170</span>),</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">weight=</span><span class="fu">c</span>(<span class="fl">70.6</span>,<span class="fl">80.9</span>,<span class="fl">90.6</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="ソースコード0.10-ファイルの読み込み" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード0.10-ファイルの読み込み">ソースコード0.10　ファイルの読み込み</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#smple &lt;- read.csv(filename,fileEncoding="UTF-8",header=TRUE,na.stromgs=c("*")))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="ソースコード0.11-ファイルの選択" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード0.11-ファイルの選択">ソースコード0.11 ファイルの選択</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#sample &lt;- read.csv(file.choose(),header=TRUE,na.strings=c("*"))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="第1章-測定と尺度" class="level2">
+<h2 class="anchored" data-anchor-id="第1章-測定と尺度">第1章　測定と尺度</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>obj<span class="sc">$</span>gender <span class="ot">&lt;-</span> <span class="fu">factor</span>(obj<span class="sc">$</span>gender,<span class="at">levels=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>obj</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    name gender height weight
+1 kosugi      1    170   70.6
+2 tanaka      2    160   80.9
+3 suzuki      1    170   90.6</code></pre>
+</div>
+</div>
+</section>
+<section id="第2章-変数" class="level2">
+<h2 class="anchored" data-anchor-id="第2章-変数">第2章　変数</h2>
+<section id="中心化傾向の指標" class="level3">
+<h3 class="anchored" data-anchor-id="中心化傾向の指標">中心化傾向の指標</h3>
+<ol type="1">
+<li>平均（mean）</li>
+<li>中央値（median）</li>
+<li>最頻値（mode）</li>
+<li>分散（variance）</li>
+<li>標準偏差（standard deviation）</li>
+<li>範囲（range）</li>
+<li>四分位（quartile）</li>
+<li>パーセンタイル（percentile）</li>
+</ol>
+</section>
+<section id="データの相対的位置" class="level3">
+<h3 class="anchored" data-anchor-id="データの相対的位置">データの相対的位置</h3>
+<dl>
+<dt>標準化</dt>
+<dd>
+データの平均を0、標準偏差を1に変換すること
+</dd>
+<dt>Z得点</dt>
+<dd>
+平均0、標準偏差（分散）1に変換した値 (Rでは <code>scale()</code> 関数を使う)
+</dd>
+<dt>偏差値</dt>
+<dd>
+平均50、標準偏差10（分散100）に変換した値
+</dd>
+<dt>正規分布</dt>
+<dd>
+左右対称の釣鐘型の分布。特に平均0、分散1のものは「標準正規分布」と呼ばれます
+</dd>
+</dl>
+</section>
+</section>
+<section id="第3章-複数の変数" class="level2">
+<h2 class="anchored" data-anchor-id="第3章-複数の変数">第3章　複数の変数</h2>
+<section id="ソースコード3.1-クロス集計表" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード3.1-クロス集計表">ソースコード3.1　クロス集計表</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#４重のクロス集計表</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(Titanic)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>Titanic</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>, , Age = Child, Survived = No
+
+      Sex
+Class  Male Female
+  1st     0      0
+  2nd     0      0
+  3rd    35     17
+  Crew    0      0
+
+, , Age = Adult, Survived = No
+
+      Sex
+Class  Male Female
+  1st   118      4
+  2nd   154     13
+  3rd   387     89
+  Crew  670      3
+
+, , Age = Child, Survived = Yes
+
+      Sex
+Class  Male Female
+  1st     5      1
+  2nd    11     13
+  3rd    13     14
+  Crew    0      0
+
+, , Age = Adult, Survived = Yes
+
+      Sex
+Class  Male Female
+  1st    57    140
+  2nd    14     80
+  3rd    75     76
+  Crew  192     20</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#２重のクロス集計表</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>Titanic[, <span class="st">"Male"</span>, <span class="st">"Adult"</span>, ]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Survived
+Class   No Yes
+  1st  118  57
+  2nd  154  14
+  3rd  387  75
+  Crew 670 192</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#相対頻度での換算</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(Titanic[, <span class="st">"Male"</span>, <span class="st">"Adult"</span>, ], <span class="at">margin =</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Survived
+Class          No        Yes
+  1st  0.67428571 0.32571429
+  2nd  0.91666667 0.08333333
+  3rd  0.83766234 0.16233766
+  Crew 0.77726218 0.22273782</code></pre>
+</div>
+</div>
+<p>乗組員の７割以上がなくなっていることがわかる.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#列ごとの比率</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(Titanic[, <span class="st">"Male"</span>, <span class="st">"Adult"</span>, ], <span class="at">margin =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Survived
+Class          No        Yes
+  1st  0.08878856 0.16863905
+  2nd  0.11587660 0.04142012
+  3rd  0.29119639 0.22189349
+  Crew 0.50413845 0.56804734</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="第4章-母集団と標本" class="level2">
+<h2 class="anchored" data-anchor-id="第4章-母集団と標本">第4章　母集団と標本</h2>
+<p>推測統計学の基本原理 標本平均の平均は母平均に一致する</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#乱数を発生させて、仮想的なデータを作る</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">#set.seed()関数で乱数を作成</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">rnorm</span>(N, <span class="dv">50</span>, <span class="dv">10</span>))</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co">#平均</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 49.953</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Y-mean(Y)　個々のデータの平均からのズレ</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co">#(Y-mean(Y))^2　個々のデータの平均からのズレの二乗</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co">#mean((Y-mean(Y))^2)　分散</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>varY <span class="ot">&lt;-</span> <span class="fu">mean</span>((Y<span class="sc">-</span><span class="fu">mean</span>(Y))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>varY</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 99.69879</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#分散の平方根　＝　標準偏差</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(varY)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.984928</code></pre>
+</div>
+</div>
+<p>最初の10個のデータを使用して平均と標準偏差を出す</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sample1 <span class="ot">&lt;-</span> Y[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>sample1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 55 57 48 45 56 31 56 47 47 40</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sample1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 48.2</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((sample1<span class="sc">-</span><span class="fu">mean</span>(sample1))<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.884161</code></pre>
+</div>
+</div>
+<p>Rの関数であるsample()を使って、データの一部をランダムに抽出することができる.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>sample2 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Y, <span class="dv">10</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>sample2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 48 59 56 44 55 50 68 61 58 55</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sample2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 55.4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((sample2<span class="sc">-</span><span class="fu">mean</span>(sample2))<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.514599</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>sample3 <span class="ot">&lt;-</span> <span class="fu">sample</span>(Y, <span class="dv">10</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>sample3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 42 66 58 59 55 44 40 39 54 47</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sample3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 50.4</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">mean</span>((sample3<span class="sc">-</span><span class="fu">mean</span>(sample3))<span class="sc">^</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8.777243</code></pre>
+</div>
+</div>
+<p>平均も標準偏差も大きくなったり小さくなったり、変動する。全体N=1000のうち部分的に抽出した標本（n=10）の平均は、母集団の平均に近づいていく。</p>
+</section>
+<section id="第5章-統計的仮設検定の考え方" class="level2">
+<h2 class="anchored" data-anchor-id="第5章-統計的仮設検定の考え方">第5章 統計的仮設検定の考え方</h2>
+<section id="ソースコード5.1-無相関データ" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード5.1-無相関データ">ソースコード5.1　無相関データ</h3>
+<p>相関がないN=100000のデータを作って最初の２０このデータを取り出して相関を計算するもの</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co">#乱数発生</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12345</span>)</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="co">#特別なパッケージが必要なのでMASSパッケージを読み込む</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="co">#作り出す乱数の数を決めておく</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a><span class="co">#平均をゼロ、相関もゼロのなるような数字のくみを１万個作ってXに代入</span></span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(N,<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">2</span>), <span class="at">empirical =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Xの最初の20組のデータで相関係数を計算する</span></span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(X[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, ])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          [,1]      [,2]
+[1,] 1.0000000 0.2189338
+[2,] 0.2189338 1.0000000</code></pre>
+</div>
+</div>
+<p>本来は相関が０のデータであるはずなのに、N=20のデータを「とってきた」だけで、約0.2の相関があるように見えてしまうことがある。</p>
+</section>
+<section id="step1仮説を考える" class="level3">
+<h3 class="anchored" data-anchor-id="step1仮説を考える">Step1：仮説を考える</h3>
+<p>仮説とは検証したい仮説とその反論的仮説からなる。 前者を対立仮説（H1）、後者を帰無仮説（H0）と呼ぶ。</p>
+</section>
+<section id="step2有意水準棄却域を決める" class="level3">
+<h3 class="anchored" data-anchor-id="step2有意水準棄却域を決める">Step2：有意水準・棄却域を決める</h3>
+<p>有意水準：対立仮説と帰無仮説のどちらを採択するかの基準のこと。 棄却域：仮説を捨てるレベルの範囲。 心理業界では一般的に有意水準を5%と決める。</p>
+</section>
+<section id="step3統計的仮説検定量を考える" class="level3">
+<h3 class="anchored" data-anchor-id="step3統計的仮説検定量を考える">Step3：統計的仮説検定量を考える</h3>
+<p>どんな統計量を使用するか 度数分布の場合はχ^2分布 平均の差の検定の場合はt分布、F分布</p>
+</section>
+</section>
+<section id="第6章-度数分布の考え方" class="level2">
+<h2 class="anchored" data-anchor-id="第6章-度数分布の考え方">第6章 度数分布の考え方</h2>
+<section id="ソースコード6.1" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード6.1">ソースコード6.1</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co">#黒s表をtblオブジェクトに入れる</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="do">## クロス表は3行（nrow=3）の行列matrixで、行ごとに入力していることを意味するbyrowオプションをつけている。</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>tbl <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">10</span>,<span class="dv">40</span>,<span class="dv">30</span>,<span class="dv">20</span>),<span class="at">nrow =</span> <span class="dv">3</span> , <span class="at">byrow =</span> T)</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="co">#tblオブジェクトをchisq.test関数に入れる</span></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(tbl)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  tbl
+X-squared = 16.667, df = 2, p-value = 0.0002404</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="第7章-平均値の差の検定基本原理" class="level2">
+<h2 class="anchored" data-anchor-id="第7章-平均値の差の検定基本原理">第7章 平均値の差の検定、基本原理</h2>
+<section id="用語の整理" class="level3">
+<h3 class="anchored" data-anchor-id="用語の整理">用語の整理</h3>
+<p>要因：平均値を左右するもので、効果がある、効果がないといったことを検証したい対象そのもの。 水準：1つの要因につき何パターンあるかということを示すもの</p>
+<p>郡内：反復想定とも呼ばれる。同じ人から複数回データを取った時。例えば実験前と実験後の答えという対応する箇所が含まれている時。 群間：データを構成する比較群が共通しないことを意味している。性差の検証と時ある人が男かつ女であることない時。</p>
+</section>
+<section id="ソースコード7.1-対応のないt検定" class="level3">
+<h3 class="anchored" data-anchor-id="ソースコード7.1-対応のないt検定">ソースコード7.1　対応のないt検定</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co">#乱数の開始地点を決める</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="co">#データのサイズをNとして決める。今回は10</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="co">#二つのグループの平均をそれぞれmuA,muBとする</span></span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>muA <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>muB <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a><span class="co">#二つのグループで共通する標準偏差の大きさを決める</span></span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a><span class="co">#二つのグループの数字を正規乱数からN個作ります</span></span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N,muA,sigma)</span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N,muB,sigma)</span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a>X1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 32.8724716 -1.9677168  3.0570749  5.8770705  0.2932666  0.5272005
+ [7] 17.4813934  8.8304477 11.5265763 31.8997811</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>X2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 23.56986 47.16752 42.81452 23.24021 38.96067 24.67681 11.06199 16.92672
+ [9] 19.95178 29.88164</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co">#二つのグループの平均値の差をt検定する</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(X1,X2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  X1 and X2
+t = -3.0749, df = 17.894, p-value = 0.006561
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -28.258735  -5.312094
+sample estimates:
+mean of x mean of y 
+ 11.03976  27.82517 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co">#t検定のオプションvar.equal = TRUEは分散が等しいとするという意味</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(X1,X2,<span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  X1 and X2
+t = -3.0749, df = 18, p-value = 0.006527
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -28.253876  -5.316953
+sample estimates:
+mean of x mean of y 
+ 11.03976  27.82517 </code></pre>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
